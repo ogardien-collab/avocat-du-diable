@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L’Avocat du diable — Débats C1</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES & DESIGN TOKENS (Haute lisibilité vidéoprojecteur & mobile)
+       ========================================================================== */
+    :root {
+      --bg-page: #f1f5f9;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f8fafc;
+      --border-color: #cbd5e1;
+      --border-light: #e2e8f0;
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+
+      --accent-crimson: #be123c;
+      --accent-crimson-hover: #9f1239;
+      --accent-crimson-soft: #fff1f2;
+
+      --role-a-bg: #eff6ff;
+      --role-a-border: #93c5fd;
+      --role-a-text: #1d4ed8;
+      --role-a-badge: #1e40af;
+
+      --role-b-bg: #fef2f2;
+      --role-b-border: #fca5a5;
+      --role-b-text: #b91c1c;
+      --role-b-badge: #991b1b;
+
+      --success-bg: #dcfce7;
+      --success-border: #22c55e;
+      --success-text: #15803d;
+
+      --warning-bg: #fef3c7;
+      --warning-text: #b45309;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+      --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.14);
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-serif: Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: all 0.18s ease;
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid var(--accent-crimson);
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       HEADER & BARRE ORGANISATEUR
+       ========================================================================== */
+    .app-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-light);
+      padding: 0.9rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #be123c, #881337);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(190, 18, 60, 0.25);
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.15;
+    }
+
+    .brand-subtitle {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .organizer-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .btn-subtle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.48rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-subtle:hover {
+      background: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       CONTENEUR PRINCIPAL
+       ========================================================================== */
+    .main-container {
+      max-width: 1140px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       PANNEAU DE CONFIGURATION (CATÉGORIES & OPTIONS)
+       ========================================================================== */
+    .config-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1.15rem 1.35rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .config-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+    }
+
+    .section-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-link {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--accent-crimson);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-link:hover {
+      background: var(--accent-crimson-soft);
+    }
+
+    .categories-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .cat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.86rem;
+      font-weight: 600;
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      user-select: none;
+    }
+
+    .cat-pill:hover {
+      border-color: var(--text-secondary);
+    }
+
+    .cat-pill.active {
+      background: var(--text-primary);
+      border-color: var(--text-primary);
+      color: #ffffff;
+    }
+
+    .cat-count {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.08);
+      color: inherit;
+    }
+
+    .cat-pill.active .cat-count {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .connector-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    /* Switch Toggle */
+    .toggle-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .toggle-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-track {
+      width: 46px;
+      height: 26px;
+      background: #cbd5e1;
+      border-radius: var(--radius-pill);
+      position: relative;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .toggle-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease;
+    }
+
+    .toggle-input:checked + .toggle-track {
+      background: var(--accent-crimson);
+    }
+
+    .toggle-input:checked + .toggle-track::after {
+      transform: translateX(20px);
+    }
+
+    .toggle-input:focus-visible + .toggle-track {
+      outline: 3px solid var(--accent-crimson);
+      outline-offset: 2px;
+    }
+
+    /* Segmented Count Selector */
+    .count-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      transition: opacity 0.2s ease;
+    }
+
+    .count-selector.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: var(--bg-page);
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .seg-btn {
+      padding: 0.3rem 0.72rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .seg-btn.active {
+      background: var(--bg-surface);
+      color: var(--accent-crimson);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .deck-status {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .counter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.9rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-pill);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       ZONE PRINCIPALE : PIOCHE & CARTE DE DÉBAT
+       ========================================================================== */
+    .stage-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .draw-action-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0.95rem 2.1rem;
+      background: linear-gradient(135deg, var(--accent-crimson), #9f1239);
+      color: #ffffff;
+      font-size: 1.12rem;
+      font-weight: 800;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 8px 20px -4px rgba(190, 18, 60, 0.45);
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(190, 18, 60, 0.55);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .debate-card {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2rem 2.25rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .debate-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--role-a-badge), var(--accent-crimson), var(--role-b-badge));
+    }
+
+    @keyframes cardDrawIn {
+      0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .debate-card.animate-draw {
+      animation: cardDrawIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .card-placeholder {
+      text-align: center;
+      padding: 2.25rem 1rem;
+      color: var(--text-secondary);
+    }
+
+    .card-placeholder h2 {
+      font-size: 1.65rem;
+      color: var(--text-primary);
+      margin-bottom: 0.65rem;
+    }
+
+    .card-placeholder p {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.38rem 0.95rem;
+      border-radius: var(--radius-pill);
+      background: var(--accent-crimson-soft);
+      color: var(--accent-crimson);
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-question {
+      font-family: var(--font-serif);
+      font-size: clamp(1.45rem, 2.8vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.32;
+      color: var(--text-primary);
+      text-align: center;
+      margin: 0.5rem auto 1.85rem;
+      max-width: 920px;
+    }
+
+    /* ==========================================================================
+       RÔLES POUR / CONTRE & CONNECTEURS INTERACTIFS
+       ========================================================================== */
+    .roles-header {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .btn-swap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.48rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--bg-page);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-pill);
+    }
+
+    .btn-swap:hover {
+      background: #e2e8f0;
+      border-color: var(--text-secondary);
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    .player-box {
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.35rem;
+      border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .player-box.role-pour {
+      background: var(--role-a-bg);
+      border-color: var(--role-a-border);
+    }
+
+    .player-box.role-contre {
+      background: var(--role-b-bg);
+      border-color: var(--role-b-border);
+    }
+
+    .player-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .player-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .role-badge {
+      font-size: 0.86rem;
+      font-weight: 800;
+      padding: 0.32rem 0.8rem;
+      border-radius: var(--radius-pill);
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+
+    .player-box.role-pour .role-badge {
+      background: var(--role-a-badge);
+    }
+
+    .player-box.role-contre .role-badge {
+      background: var(--role-b-badge);
+    }
+
+    .connectors-block-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 0.45rem;
+    }
+
+    .connectors-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .connector-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 0.95rem;
+      background: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: left;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .connector-chip:hover {
+      border-color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+
+    .connector-chip .chip-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      color: transparent;
+      transition: all 0.15s ease;
+    }
+
+    .connector-chip.used {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+      color: var(--success-text);
+    }
+
+    .connector-chip.used .chip-text {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
+
+    .connector-chip.used .chip-check {
+      background: var(--success-border);
+      border-color: var(--success-border);
+      color: #ffffff;
+    }
+
+    /* ==========================================================================
+       CHRONOMÈTRE INTÉGRÉ & PERSONNALISABLE
+       ========================================================================== */
+    .timer-bar {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.35rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer-bar.finished {
+      border-color: var(--accent-crimson);
+      background: var(--accent-crimson-soft);
+      animation: timerPulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes timerPulse {
+      from { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0.35); }
+      to { box-shadow: 0 0 0 10px rgba(190, 18, 60, 0); }
+    }
+
+    .timer-progress-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--border-light);
+    }
+
+    .timer-progress-fill {
+      height: 100%;
+      width: 100%;
+      background: var(--accent-crimson);
+      transition: width 0.5s linear;
+    }
+
+    .timer-phases {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .phase-btn {
+      padding: 0.48rem 0.95rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: var(--bg-page);
+      border: 1.5px solid transparent;
+    }
+
+    .phase-btn.active {
+      background: var(--text-primary);
+      color: #ffffff;
+    }
+
+    .timer-duration-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-subtle);
+      padding: 0.32rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .duration-input {
+      width: 54px;
+      padding: 0.2rem 0.35rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 800;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+    }
+
+    .duration-input:disabled {
+      opacity: 0.6;
+      background: var(--bg-page);
+    }
+
+    .timer-center {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .timer-display {
+      font-variant-numeric: tabular-nums;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      min-width: 104px;
+      text-align: center;
+    }
+
+    .timer-bar.finished .timer-display {
+      color: var(--accent-crimson);
+    }
+
+    .timer-finished-label {
+      display: none;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--accent-crimson);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .timer-bar.finished .timer-finished-label {
+      display: inline-block;
+    }
+
+    .timer-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-timer-start {
+      padding: 0.55rem 1.15rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.92rem;
+      background: var(--text-primary);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-timer-start:hover {
+      background: #1e293b;
+    }
+
+    .btn-timer-start.running {
+      background: var(--accent-crimson);
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .btn-icon:hover {
+      background: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    .btn-icon.muted {
+      opacity: 0.5;
+    }
+
+    /* ==========================================================================
+       FENÊTRES MODALES (GESTION SUJETS, CONNECTEURS, CONFIRMATION)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-dialog.modal-sm {
+      max-width: 460px;
+    }
+
+    .modal-header {
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      color: var(--text-secondary);
+    }
+
+    .modal-close:hover {
+      background: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 1.25rem 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-subtle);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .form-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .form-field label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.58rem 0.78rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.94rem;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 68px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    .btn-save {
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--accent-crimson);
+      color: #ffffff;
+    }
+
+    .btn-save:hover {
+      background: var(--accent-crimson-hover);
+    }
+
+    .btn-danger-outline {
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: #b91c1c;
+      border: 1.5px solid #fca5a5;
+      background: #fef2f2;
+    }
+
+    .btn-danger-outline:hover {
+      background: #fee2e2;
+    }
+
+    .search-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.85rem;
+      padding: 0.75rem 0.9rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+    }
+
+    .item-row:hover {
+      border-color: var(--border-color);
+    }
+
+    .item-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-cat-tag {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-crimson);
+      background: var(--accent-crimson-soft);
+      padding: 0.12rem 0.5rem;
+      border-radius: var(--radius-pill);
+      margin-bottom: 0.3rem;
+    }
+
+    .item-text {
+      font-size: 0.94rem;
+      color: var(--text-primary);
+      word-break: break-word;
+    }
+
+    .item-btns {
+      display: flex;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .btn-mini {
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+
+    .btn-mini:hover {
+      background: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    .btn-mini.delete:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #b91c1c;
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATION
+       ========================================================================== */
+    .toast-container {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--text-primary);
+      color: #ffffff;
+      padding: 0.75rem 1.15rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      background: #991b1b;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE (MOBILE & TABLETTE)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .app-header {
+        padding: 0.8rem 1rem;
+      }
+
+      .main-container {
+        padding: 1rem 0.85rem 2.5rem;
+      }
+
+      .debate-card {
+        padding: 1.35rem 1.15rem;
+      }
+
+      .players-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timer-bar {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .organizer-bar {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .btn-subtle {
+        font-size: 0.8rem;
+        padding: 0.42rem 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       EN-TÊTE & ESPACE ORGANISATEUR
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18"/>
+            <path d="M5 7h14"/>
+            <path d="M3 13l2-6 2 6a2.5 2.5 0 0 1-4 0Z"/>
+            <path d="M17 13l2-6 2 6a2.5 2.5 0 0 1-4 0Z"/>
+            <path d="M8 21h8"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">L’Avocat du diable</h1>
+          <div class="brand-subtitle">Pioche de débats argumentatifs — Niveau C1</div>
+        </div>
+      </div>
+
+      <nav class="organizer-bar" aria-label="Espace organisateur">
+        <button type="button" class="btn-subtle" id="btnOpenSubjects">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+          Gérer les sujets
+        </button>
+        <button type="button" class="btn-subtle" id="btnOpenConnectors">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Gérer les connecteurs
+        </button>
+        <button type="button" class="btn-subtle" id="btnExportJson" title="Exporter les sujets et connecteurs au format JSON">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exporter (.json)
+        </button>
+        <button type="button" class="btn-subtle" id="btnImportJson" title="Importer un fichier JSON de listes">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Importer (.json)
+        </button>
+        <input type="file" id="fileImportInput" accept=".json,application/json" style="display: none;">
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CONTENU PRINCIPAL
+       ======================================================================== -->
+  <main class="main-container">
+
+    <!-- Panneau des filtres de catégories et options de jeu -->
+    <section class="config-panel" aria-label="Paramètres de la pioche">
+      <div class="config-header">
+        <span class="section-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          Catégories actives
+        </span>
+        <button type="button" class="btn-link" id="btnToggleAllCats">Tout désélectionner</button>
+      </div>
+
+      <div class="categories-grid" id="categoriesContainer">
+        <!-- Généré dynamiquement -->
+      </div>
+
+      <div class="options-row">
+        <div class="connector-controls">
+          <label class="toggle-wrapper">
+            <input type="checkbox" class="toggle-input" id="toggleConnectors" checked>
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span>Connecteurs logiques imposés</span>
+          </label>
+
+          <div class="count-selector" id="connectorCountWrapper">
+            <span>Par joueur :</span>
+            <div class="segmented" role="radiogroup" aria-label="Nombre de connecteurs par joueur">
+              <button type="button" class="seg-btn" data-count="1">1</button>
+              <button type="button" class="seg-btn active" data-count="2">2</button>
+              <button type="button" class="seg-btn" data-count="3">3</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="deck-status">
+          <div class="counter-badge" id="deckCounter">87 / 87 cartes restantes</div>
+          <button type="button" class="btn-subtle" id="btnResetDeck">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Réinitialiser la pioche
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scène centrale : Bouton de pioche, Carte de débat & Chronomètre -->
+    <section class="stage-wrapper" aria-live="polite">
+      <div class="draw-action-bar">
+        <button type="button" class="btn-primary" id="btnDrawCard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="14" height="18" rx="2"/><path d="M18 8h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10"/></svg>
+          Piocher un sujet de débat
+        </button>
+      </div>
+
+      <!-- Carte de débat -->
+      <article class="debate-card" id="debateCard">
+        <div class="card-placeholder" id="cardPlaceholder">
+          <h2>Prêts à défendre l’indéfendable ?</h2>
+          <p>Sélectionnez les catégories souhaitées, activez ou non les connecteurs logiques imposés, puis cliquez sur <strong>« Piocher un sujet de débat »</strong> pour lancer le tour.</p>
+        </div>
+
+        <div id="cardContent" style="display: none;">
+          <div class="card-meta">
+            <span class="card-category-badge" id="cardCategory">Catégorie</span>
+            <span style="font-size: 0.84rem; font-weight: 600; color: var(--text-muted);" id="cardDrawNumber">Tour #1</span>
+          </div>
+
+          <h2 class="card-question" id="cardQuestion">Sujet du débat</h2>
+
+          <div class="roles-header">
+            <button type="button" class="btn-swap" id="btnSwapRoles">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+              Inverser les rôles
+            </button>
+          </div>
+
+          <div class="players-grid">
+            <!-- Encart Joueur A -->
+            <div class="player-box role-pour" id="playerABox">
+              <div class="player-top">
+                <span class="player-name">Joueur A</span>
+                <span class="role-badge" id="playerARole">Défend la thèse 1 / Pour</span>
+              </div>
+              <div id="playerAConnectorsWrap">
+                <div class="connectors-block-title">Connecteurs imposés (cliquer pour valider)</div>
+                <div class="connectors-list" id="playerAConnectors"></div>
+              </div>
+            </div>
+
+            <!-- Encart Joueur B -->
+            <div class="player-box role-contre" id="playerBBox">
+              <div class="player-top">
+                <span class="player-name">Joueur B</span>
+                <span class="role-badge" id="playerBRole">Défend la thèse 2 / Contre</span>
+              </div>
+              <div id="playerBConnectorsWrap">
+                <div class="connectors-block-title">Connecteurs imposés (cliquer pour valider)</div>
+                <div class="connectors-list" id="playerBConnectors"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Chronomètre intégré et personnalisable -->
+      <div class="timer-bar" id="timerBar" aria-label="Chronomètre du débat">
+        <div class="timer-phases">
+          <button type="button" class="phase-btn active" id="btnPhasePrep" data-phase="prep">Préparation</button>
+          <button type="button" class="phase-btn" id="btnPhaseDebate" data-phase="debate">Débat</button>
+
+          <label class="timer-duration-edit" title="Modifier la durée de la phase sélectionnée (en minutes)">
+            <span>Durée :</span>
+            <input type="number" id="timerMinutesInput" class="duration-input" min="1" max="120" value="10">
+            <span>min</span>
+          </label>
+        </div>
+
+        <div class="timer-center">
+          <div class="timer-display" id="timerDisplay">10:00</div>
+          <span class="timer-finished-label" id="timerFinishedLabel">Temps écoulé !</span>
+        </div>
+
+        <div class="timer-actions">
+          <button type="button" class="btn-timer-start" id="btnTimerToggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            Démarrer
+          </button>
+          <button type="button" class="btn-icon" id="btnTimerReset" title="Réinitialiser le chronomètre">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          </button>
+          <button type="button" class="btn-icon" id="btnTimerSound" title="Activer/désactiver le signal sonore">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </button>
+        </div>
+
+        <div class="timer-progress-bg">
+          <div class="timer-progress-fill" id="timerProgressFill"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       MODALE 1 : GESTION DES SUJETS
+       ======================================================================== -->
+  <div class="modal-backdrop" id="modalSubjects" role="dialog" aria-modal="true" aria-labelledby="modalSubjectsTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalSubjectsTitle">Gérer les sujets de débat</h2>
+        <button type="button" class="modal-close" data-close-modal="modalSubjects" aria-label="Fermer">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form class="form-box" id="subjectForm">
+          <input type="hidden" id="editSubjectId">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="subjectCatSelect">Catégorie</label>
+              <select id="subjectCatSelect" class="form-select"></select>
+            </div>
+            <div class="form-field" id="newCatField" style="display: none;">
+              <label for="subjectNewCatInput">Nom de la nouvelle catégorie</label>
+              <input type="text" id="subjectNewCatInput" class="form-input" placeholder="Ex. Histoire et mémoire">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="subjectTextInput">Intitulé du sujet</label>
+            <textarea id="subjectTextInput" class="form-textarea" placeholder="Saisissez la question du débat..." required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-subtle" id="btnCancelSubjectEdit" style="display: none;">Annuler la modification</button>
+            <button type="submit" class="btn-save" id="btnSaveSubject">Ajouter le sujet</button>
+          </div>
+        </form>
+
+        <div class="search-bar">
+          <input type="text" id="searchSubjectsInput" class="form-input" placeholder="Rechercher un sujet..." style="flex: 2; min-width: 180px;">
+          <select id="filterSubjectsCat" class="form-select" style="flex: 1; min-width: 180px;">
+            <option value="">Toutes les catégories</option>
+          </select>
+        </div>
+
+        <div class="items-list" id="subjectsModalList"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-danger-outline" id="btnResetDefaultSubjects">Réinitialiser les sujets par défaut</button>
+        <button type="button" class="btn-subtle" data-close-modal="modalSubjects">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODALE 2 : GESTION DES CONNECTEURS
+       ======================================================================== -->
+  <div class="modal-backdrop" id="modalConnectors" role="dialog" aria-modal="true" aria-labelledby="modalConnectorsTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalConnectorsTitle">Gérer les connecteurs logiques</h2>
+        <button type="button" class="modal-close" data-close-modal="modalConnectors" aria-label="Fermer">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form class="form-box" id="connectorForm">
+          <input type="hidden" id="editConnectorId">
+          <div class="form-field">
+            <label for="connectorTextInput">Connecteur logique</label>
+            <input type="text" id="connectorTextInput" class="form-input" placeholder="Ex. En dépit du fait que (+ subjonctif)" required>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-subtle" id="btnCancelConnectorEdit" style="display: none;">Annuler la modification</button>
+            <button type="submit" class="btn-save" id="btnSaveConnector">Ajouter le connecteur</button>
+          </div>
+        </form>
+
+        <div class="search-bar">
+          <input type="text" id="searchConnectorsInput" class="form-input" placeholder="Rechercher un connecteur...">
+        </div>
+
+        <div class="items-list" id="connectorsModalList"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-danger-outline" id="btnResetDefaultConnectors">Réinitialiser les connecteurs par défaut</button>
+        <button type="button" class="btn-subtle" data-close-modal="modalConnectors">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODALE 3 : CONFIRMATION PERSONNALISÉE (Remplace confirm())
+       ======================================================================== -->
+  <div class="modal-backdrop" id="modalConfirm" role="dialog" aria-modal="true" aria-labelledby="modalConfirmTitle">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalConfirmTitle">Confirmation</h2>
+        <button type="button" class="modal-close" id="btnConfirmCancelX" aria-label="Fermer">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modalConfirmMessage" style="font-size: 0.98rem; color: var(--text-secondary);"></p>
+      </div>
+      <div class="modal-footer" style="justify-content: flex-end;">
+        <button type="button" class="btn-subtle" id="btnConfirmCancel">Annuler</button>
+        <button type="button" class="btn-save" id="btnConfirmOk">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zone des notifications Toast -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       LOGIQUE JAVASCRIPT (100% AUTONOME)
+       ======================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ======================================================================
+         1. DONNÉES PAR DÉFAUT (STRICTEMENT CONFORMES AUX LISTES A ET B)
+         ====================================================================== */
+      const DEFAULT_SUBJECTS = [
+        // Politique, démocratie et géopolitique (12)
+        { id: 's1', category: 'Politique, démocratie et géopolitique', text: 'L’instauration du vote obligatoire est-elle un remède à la crise démocratique ou une atteinte à la liberté de conscience ?' },
+        { id: 's2', category: 'Politique, démocratie et géopolitique', text: 'L’abaissement de la majorité électorale à seize ans favorise-t-il l’émancipation civique ou l’instrumentalisation politique de la jeunesse ?' },
+        { id: 's3', category: 'Politique, démocratie et géopolitique', text: 'Le non-cumul strict des mandats dans le temps permet-il de renouveler la classe politique ou prive-t-il l’État de l’expérience nécessaire ?' },
+        { id: 's4', category: 'Politique, démocratie et géopolitique', text: 'Le rétablissement d’un service national obligatoire renforcerait-il la cohésion républicaine ?' },
+        { id: 's5', category: 'Politique, démocratie et géopolitique', text: 'Le tirage au sort de citoyens pour légiférer est-il plus démocratique que l’élection de représentants ?' },
+        { id: 's6', category: 'Politique, démocratie et géopolitique', text: 'Le recours fréquent aux référendums d’initiative citoyenne (RIC) revitaliserait-il la démocratie ou ouvrirait-il la voie au populisme ?' },
+        { id: 's7', category: 'Politique, démocratie et géopolitique', text: 'La montée des abstentions traduit-elle un désintérêt civique ou un rejet lucide de l’offre politique actuelle ?' },
+        { id: 's8', category: 'Politique, démocratie et géopolitique', text: 'La désobéissance civile est-elle devenue un mode d’action politique légitime face à l’inertie des gouvernements ?' },
+        { id: 's9', category: 'Politique, démocratie et géopolitique', text: 'L’Union européenne doit-elle évoluer vers une véritable fédération dotée d’une défense commune au détriment des souverainetés nationales ?' },
+        { id: 's10', category: 'Politique, démocratie et géopolitique', text: 'La diplomatie française doit-elle privilégier le pragmatisme économique ou l’intransigeance sur les droits humains ?' },
+        { id: 's11', category: 'Politique, démocratie et géopolitique', text: 'Le retour des conflits de haute intensité en Europe justifie-t-il une économie de guerre et le rétablissement d’une forme de conscription ?' },
+        { id: 's12', category: 'Politique, démocratie et géopolitique', text: 'Les sanctions économiques internationales sont-elles une arme diplomatique efficace ou pénalisent-elles uniquement les populations civiles ?' },
+
+        // Économie, travail et justice sociale (14)
+        { id: 's13', category: 'Économie, travail et justice sociale', text: 'Le revenu universel d’existence est-il un levier d’émancipation sociale ou la fin de la valeur travail ?' },
+        { id: 's14', category: 'Économie, travail et justice sociale', text: 'La fiscalité confiscatoire sur les successions est-elle le seul outil légitime pour garantir une réelle égalité des chances ?' },
+        { id: 's15', category: 'Économie, travail et justice sociale', text: 'L’instauration d’un impôt minimum mondial sur les ultrariches (type taxe Zucman) est-elle un impératif de justice fiscale ou un facteur de fuite des capitaux ?' },
+        { id: 's16', category: 'Économie, travail et justice sociale', text: 'L’encadrement du droit de grève par un service minimum élargi dénature-t-il un acquis social fondamental ?' },
+        { id: 's17', category: 'Économie, travail et justice sociale', text: 'La méritocratie républicaine n’est-elle plus qu’un mythe légitimant la reproduction sociale ?' },
+        { id: 's18', category: 'Économie, travail et justice sociale', text: 'La réduction du temps de travail est-elle compatible avec le maintien de notre modèle social et de notre compétitivité ?' },
+        { id: 's19', category: 'Économie, travail et justice sociale', text: 'La crise de la dette publique impose-t-elle une cure d’austérité budgétaire ou une relance par l’investissement écologique ?' },
+        { id: 's20', category: 'Économie, travail et justice sociale', text: 'L’uberisation du travail et le statut d’auto-entrepreneur favorisent-ils l’émancipation professionnelle ou la précarisation généralisée ?' },
+        { id: 's21', category: 'Économie, travail et justice sociale', text: 'Faut-il encadrer strictement les superprofits des multinationales en période d’inflation ?' },
+        { id: 's22', category: 'Économie, travail et justice sociale', text: 'La réindustrialisation de la France est-elle un objectif réaliste ou une illusion nostalgique face à la mondialisation ?' },
+        { id: 's23', category: 'Économie, travail et justice sociale', text: 'L’accès à la propriété immobilière est-il devenu un privilège héréditaire qui fracture la société française ?' },
+        { id: 's24', category: 'Économie, travail et justice sociale', text: 'Faut-il plafonner les écarts de salaires au sein d’une même entreprise de 1 à 20 ?' },
+        { id: 's25', category: 'Économie, travail et justice sociale', text: 'Le télétravail intégral libère-t-il le salarié ou dissout-il le collectif de travail et la frontière entre vie privée et vie professionnelle ?' },
+        { id: 's26', category: 'Économie, travail et justice sociale', text: 'La déconnexion numérique devrait-elle être consacrée comme un droit fondamental inaliénable ?' },
+
+        // Médias, numérique et technosciences (14)
+        { id: 's27', category: 'Médias, numérique et technosciences', text: 'La levée de l’anonymat en ligne permettrait-elle d’assainir le débat public ou d’instaurer une surveillance généralisée ?' },
+        { id: 's28', category: 'Médias, numérique et technosciences', text: 'Les algorithmes de recommandation des réseaux sociaux constituent-ils une menace existentielle pour le pluralisme démocratique ?' },
+        { id: 's29', category: 'Médias, numérique et technosciences', text: 'Les réseaux sociaux sont-ils devenus le principal espace de débat démocratique ou une fabrique algorithmique de la désinformation ?' },
+        { id: 's30', category: 'Médias, numérique et technosciences', text: 'La reconnaissance biométrique et la vidéosurveillance algorithmique dans l’espace public sont-elles compatibles avec l’État de droit ?' },
+        { id: 's31', category: 'Médias, numérique et technosciences', text: 'L’essor des intelligences artificielles génératives sonne-t-il le glas de la création artistique authentique ?' },
+        { id: 's32', category: 'Médias, numérique et technosciences', text: 'L’intelligence artificielle générative va-t-elle provoquer un chômage de masse inédit ou créer une nouvelle ère de prospérité ?' },
+        { id: 's33', category: 'Médias, numérique et technosciences', text: 'La concentration des médias entre les mains de quelques milliardaires menace-t-elle directement le pluralisme démocratique ?' },
+        { id: 's34', category: 'Médias, numérique et technosciences', text: 'Les chaînes d’information en continu favorisent-elles l’accès au savoir ou la polarisation émotionnelle de l’opinion publique ?' },
+        { id: 's35', category: 'Médias, numérique et technosciences', text: 'L’audiovisuel public doit-il être privatisé pour réduire la dépense publique ou sanctuarisé comme garant de l’intérêt général ?' },
+        { id: 's36', category: 'Médias, numérique et technosciences', text: 'Le journalisme d’opinion tend-il à supplanter le journalisme d’investigation dans le paysage médiatique contemporain ?' },
+        { id: 's37', category: 'Médias, numérique et technosciences', text: 'L’influence géopolitique et médiatique d’entrepreneurs comme Elon Musk constitue-t-elle un contre-pouvoir salvateur ou une dérive oligarchique dangereuse ?' },
+        { id: 's38', category: 'Médias, numérique et technosciences', text: 'Faut-il démanteler les géants du numérique (GAFAM) pour préserver la libre concurrence et la souveraineté numérique des États ?' },
+        { id: 's39', category: 'Médias, numérique et technosciences', text: 'La conquête spatiale est-elle le prolongement naturel de la curiosité humaine ou une fuite en avant indécente face aux crises terrestres ?' },
+        { id: 's40', category: 'Médias, numérique et technosciences', text: 'La conquête spatiale privée (SpaceX, Blue Origin) sert-elle l’intérêt de l’humanité ou privatise-t-elle un bien commun universel ?' },
+
+        // Écologie, bioéthique et santé (12)
+        { id: 's41', category: 'Écologie, bioéthique et santé', text: 'L’urgence climatique justifie-t-elle l’instauration d’une sobriété contrainte, quitte à restreindre certaines libertés individuelles ?' },
+        { id: 's42', category: 'Écologie, bioéthique et santé', text: 'La décroissance économique est-elle l’unique voie viable face aux limites planétaires ?' },
+        { id: 's43', category: 'Écologie, bioéthique et santé', text: 'L’énergie nucléaire est-elle une alliée incontournable de la décarbonation ou un pari irresponsable légué aux générations futures ?' },
+        { id: 's44', category: 'Écologie, bioéthique et santé', text: 'L’écologie punitive (zones à faibles émissions, interdiction des passoires thermiques) est-elle un mal nécessaire ou une injustice sociale envers les classes populaires ?' },
+        { id: 's45', category: 'Écologie, bioéthique et santé', text: 'Le tourisme de masse doit-il être rationné par des quotas individuels de mobilité aérienne ?' },
+        { id: 's46', category: 'Écologie, bioéthique et santé', text: 'L’antispécisme exige-t-il l’abolition totale de toute exploitation animale, y compris la recherche médicale et les parcs zoologiques ?' },
+        { id: 's47', category: 'Écologie, bioéthique et santé', text: 'La dépénalisation du cannabis est-elle une mesure de santé publique pragmatique ou un renoncement face aux addictions ?' },
+        { id: 's48', category: 'Écologie, bioéthique et santé', text: 'Le droit à mourir dans la dignité doit-il prévaloir sur l’interdit fondamental de donner la mort ?' },
+        { id: 's49', category: 'Écologie, bioéthique et santé', text: 'La gestation pour autrui (GPA) relève-t-elle de la libre disposition de son corps ou d’une marchandisation de l’être humain ?' },
+        { id: 's50', category: 'Écologie, bioéthique et santé', text: 'La modification génétique des embryons humains à des fins thérapeutiques ouvre-t-elle inévitablement la voie à l’eugénisme ?' },
+        { id: 's51', category: 'Écologie, bioéthique et santé', text: 'L’humain augmenté par le transhumanisme est-il l’aboutissement du progrès médical ou une dérive eugéniste ?' },
+        { id: 's52', category: 'Écologie, bioéthique et santé', text: 'L’essor de la santé mentale comme préoccupation majeure traduit-il une libération de la parole ou une psychologisation excessive des problèmes sociaux ?' },
+
+        // Société, culture et liberté d’expression (11)
+        { id: 's53', category: 'Société, culture et liberté d’expression', text: 'La liberté d’expression doit-elle être absolue, quitte à tolérer les discours de haine ?' },
+        { id: 's54', category: 'Société, culture et liberté d’expression', text: 'La liberté d’expression humoristique doit-elle connaître des limites face aux sensibilités identitaires et religieuses ?' },
+        { id: 's55', category: 'Société, culture et liberté d’expression', text: 'Peut-on et doit-on dissocier l’œuvre de la morale de son créateur ?' },
+        { id: 's56', category: 'Société, culture et liberté d’expression', text: 'La cancel culture (culture de l’annulation) est-elle une forme légitime de justice citoyenne ou une nouvelle censure morale ?' },
+        { id: 's57', category: 'Société, culture et liberté d’expression', text: 'L’écriture inclusive favorise-t-elle l’égalité entre les sexes ou entrave-t-elle la lisibilité et l’évolution naturelle de la langue ?' },
+        { id: 's58', category: 'Société, culture et liberté d’expression', text: 'Le déboulonnage des statues et la relecture critique du patrimoine historique relèvent-ils d’un devoir de mémoire ou d’un anachronisme révisionniste ?' },
+        { id: 's59', category: 'Société, culture et liberté d’expression', text: 'L’école publique française doit-elle revenir aux fondamentaux et à l’autorité traditionnelle pour enrayer la baisse du niveau scolaire ?' },
+        { id: 's60', category: 'Société, culture et liberté d’expression', text: 'La politesse est-elle le socle indispensable du vivre-ensemble ou une hypocrisie sociale codifiée ?' },
+        { id: 's61', category: 'Société, culture et liberté d’expression', text: 'L’obsession contemporaine pour le bien-être et le développement personnel nuit-elle à l’engagement collectif ?' },
+        { id: 's62', category: 'Société, culture et liberté d’expression', text: 'La télé-réalité est-elle le reflet fidèle de notre société ou une fabrique volontaire de l’abêtissement ?' },
+        { id: 's63', category: 'Société, culture et liberté d’expression', text: 'Le mariage civil est-il devenu une institution obsolète à l’heure de l’individualisme triomphant ?' },
+
+        // Philosophie (8)
+        { id: 's64', category: 'Philosophie', text: 'L’être humain est-il condamné à être libre ou n’est-il que le produit de ses déterminismes sociaux et biologiques ?' },
+        { id: 's65', category: 'Philosophie', text: 'La fin justifie-t-elle toujours les moyens en politique ?' },
+        { id: 's66', category: 'Philosophie', text: 'Faut-il préférer une injustice à un désordre ?' },
+        { id: 's67', category: 'Philosophie', text: 'Le bonheur est-il un devoir moral ou une illusion dangereuse ?' },
+        { id: 's68', category: 'Philosophie', text: 'L’art doit-il être utile ou sa grandeur réside-t-elle précisément dans sa gratuité ?' },
+        { id: 's69', category: 'Philosophie', text: 'Faut-il tolérer les intolérants au nom de la tolérance ?' },
+        { id: 's70', category: 'Philosophie', text: 'La quête d’immortalité priverait-elle l’existence humaine de toute sa saveur ?' },
+        { id: 's71', category: 'Philosophie', text: 'La justice doit-elle viser avant tout la réparation, la dissuasion ou le châtiment ?' },
+
+        // Proverbes et maximes (12)
+        { id: 's72', category: 'Proverbes et maximes', text: '« Qui vole un œuf vole un bœuf » : la petite transgression annonce-t-elle inexorablement la grande délinquance ?' },
+        { id: 's73', category: 'Proverbes et maximes', text: '« L’habit ne fait pas le moine » : les apparences sont-elles trompeuses ou révèlent-elles au contraire l’essentiel de notre identité sociale ?' },
+        { id: 's74', category: 'Proverbes et maximes', text: '« Aux grands maux les grands remèdes » : les situations de crise justifient-elles des mesures d’exception ?' },
+        { id: 's75', category: 'Proverbes et maximes', text: '« Il n’y a que la vérité qui blesse » : la sincérité brute est-elle une vertu ou une forme de brutalité ?' },
+        { id: 's76', category: 'Proverbes et maximes', text: '« Tout vient à point à qui sait attendre » : la patience est-elle une stratégie payante ou une excuse à l’inaction ?' },
+        { id: 's77', category: 'Proverbes et maximes', text: '« L’argent ne fait pas le bonheur » : sagesse philosophique ou consolation inventée pour les classes populaires ?' },
+        { id: 's78', category: 'Proverbes et maximes', text: '« Chassez le naturel, il revient au galop » : l’être humain est-il fondamentalement incapable de se réformer ?' },
+        { id: 's79', category: 'Proverbes et maximes', text: '« L’enfer est pavé de bonnes intentions » : faut-il juger une action uniquement à ses conséquences plutôt qu’à sa morale ?' },
+        { id: 's80', category: 'Proverbes et maximes', text: '« On ne fait pas d’omelette sans casser des œufs » : tout changement profond exige-t-il des victimes collatérales ?' },
+        { id: 's81', category: 'Proverbes et maximes', text: '« La parole est d’argent, mais le silence est d’or » : la retenue est-elle toujours supérieure à la prise de parole ?' },
+        { id: 's82', category: 'Proverbes et maximes', text: '« Qui s’assemble se ressemble » : l’amitié et l’amour reposent-ils sur la similitude ou sur la complémentarité des contraires ?' },
+        { id: 's83', category: 'Proverbes et maximes', text: '« Il faut souffrir pour être belle » : le culte de l’apparence est-il une aliénation volontaire ?' },
+
+        // Sujets décalés (4)
+        { id: 's84', category: 'Sujets décalés', text: 'Les chats ont-ils domestiqué l’espèce humaine à leur seul profit évolutif ?' },
+        { id: 's85', category: 'Sujets décalés', text: 'Faut-il interdire la diffusion des films de Noël avant le 1er décembre pour préserver la santé mentale collective ?' },
+        { id: 's86', category: 'Sujets décalés', text: 'Les moustiques jouent-ils un rôle écologique suffisant pour justifier leur maintien sur Terre ?' },
+        { id: 's87', category: 'Sujets décalés', text: 'Le divulgâchage (spoil) d’une œuvre de fiction devrait-il être passible d’une amende forfaitaire ?' }
+      ];
+
+      const DEFAULT_CONNECTORS = [
+        { id: 'c1', text: 'Au premier abord / De prime abord' },
+        { id: 'c2', text: 'En premier lieu' },
+        { id: 'c3', text: 'En définitive' },
+        { id: 'c4', text: 'Non seulement... mais encore' },
+        { id: 'c5', text: 'De surcroît' },
+        { id: 'c6', text: 'En outre' },
+        { id: 'c7', text: 'Par ailleurs' },
+        { id: 'c8', text: 'À cela s\'ajoute que' },
+        { id: 'c9', text: 'Il en va de même' },
+        { id: 'c10', text: 'D\'une part... d\'autre part' },
+        { id: 'c11', text: 'Certes' },
+        { id: 'c12', text: 'Je vous concède que' },
+        { id: 'c13', text: 'À la rigueur' },
+        { id: 'c14', text: 'Cela dit' },
+        { id: 'c15', text: 'Toujours est-il que (+ indicatif)' },
+        { id: 'c16', text: 'En dépit de (+ nom)' },
+        { id: 'c17', text: 'Bien que / En dépit du fait que (+ subjonctif)' },
+        { id: 'c18', text: 'Néanmoins' },
+        { id: 'c19', text: 'Cependant' },
+        { id: 'c20', text: 'En revanche' },
+        { id: 'c21', text: 'Or' },
+        { id: 'c22', text: 'Tandis que' },
+        { id: 'c23', text: 'À l\'inverse / Contrairement à' },
+        { id: 'c24', text: 'Étant donné que' },
+        { id: 'c25', text: 'D\'autant plus que' },
+        { id: 'c26', text: 'Sous prétexte que' },
+        { id: 'c27', text: 'Pour la simple et bonne raison que' },
+        { id: 'c28', text: 'Ce n\'est pas que (+ subjonctif)' },
+        { id: 'c29', text: 'Compte tenu de (+ nom)' },
+        { id: 'c30', text: 'Faute de (+ infinitif)' },
+        { id: 'c31', text: 'De ce fait' },
+        { id: 'c32', text: 'Par conséquent' },
+        { id: 'c33', text: 'C\'est pourquoi' },
+        { id: 'c34', text: 'C’est la raison pour laquelle' },
+        { id: 'c35', text: 'À tel point que' },
+        { id: 'c36', text: 'Tant et si bien que' },
+        { id: 'c37', text: 'En vue de (+ infinitif ou nom)' },
+        { id: 'c38', text: 'Dans la perspective de (+ infinitif ou nom)' },
+        { id: 'c39', text: 'Afin que (+ subjonctif)' },
+        { id: 'c40', text: 'De manière à ce que (+ subjonctif)' },
+        { id: 'c41', text: 'De sorte que (+ subjonctif)' },
+        { id: 'c42', text: 'De crainte que (+ subjonctif)' },
+        { id: 'c43', text: 'À l\'instar de(s)' },
+        { id: 'c44', text: 'Au même titre que' },
+        { id: 'c45', text: 'Dans la mesure où' },
+        { id: 'c46', text: 'Autrement dit' },
+        { id: 'c47', text: 'C’est-à-dire' },
+        { id: 'c48', text: 'À savoir' },
+        { id: 'c49', text: 'Notamment' },
+        { id: 'c50', text: 'D\'ailleurs' },
+        { id: 'c51', text: 'Prenons le cas de' }
+      ];
+
+      const STORAGE_KEYS = {
+        SUBJECTS: 'avocat_diable_c1_subjects_v1',
+        CONNECTORS: 'avocat_diable_c1_connectors_v1'
+      };
+
+      /* ======================================================================
+         2. ÉTAT DE L'APPLICATION
+         ====================================================================== */
+      const state = {
+        subjects: [],
+        connectors: [],
+        activeCategories: new Set(),
+        drawnIds: new Set(),
+        drawCount: 0,
+        currentCard: null,
+        rolesSwapped: false, // false => A: Pour, B: Contre | true => A: Contre, B: Pour
+        connectorsEnabled: true,
+        connectorsPerPlayer: 2,
+        roundConnectors: { A: [], B: [] }, // [{ text, used }]
+        timer: {
+          phase: 'prep', // 'prep' | 'debate'
+          durations: { prep: 10, debate: 15 }, // en minutes
+          remainingSeconds: 600,
+          totalSeconds: 600,
+          running: false,
+          intervalId: null,
+          soundEnabled: true
+        }
+      };
+
+      /* ======================================================================
+         3. UTILITAIRES (STORAGE, SHUFFLE, TOAST, CONFIRM, AUDIO)
+         ====================================================================== */
+      function deepClone(obj) {
+        return JSON.parse(JSON.stringify(obj));
+      }
+
+      function generateId(prefix) {
+        return prefix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+      }
+
+      function saveToStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.SUBJECTS, JSON.stringify(state.subjects));
+          localStorage.setItem(STORAGE_KEYS.CONNECTORS, JSON.stringify(state.connectors));
+        } catch (err) {
+          console.warn('Sauvegarde localStorage impossible :', err);
+        }
+      }
+
+      function loadFromStorage() {
+        try {
+          const savedSub = localStorage.getItem(STORAGE_KEYS.SUBJECTS);
+          const savedCon = localStorage.getItem(STORAGE_KEYS.CONNECTORS);
+
+          state.subjects = savedSub ? JSON.parse(savedSub) : deepClone(DEFAULT_SUBJECTS);
+          state.connectors = savedCon ? JSON.parse(savedCon) : deepClone(DEFAULT_CONNECTORS);
+
+          if (!Array.isArray(state.subjects) || state.subjects.length === 0) {
+            state.subjects = deepClone(DEFAULT_SUBJECTS);
+          }
+          if (!Array.isArray(state.connectors)) {
+            state.connectors = deepClone(DEFAULT_CONNECTORS);
+          }
+        } catch (err) {
+          state.subjects = deepClone(DEFAULT_SUBJECTS);
+          state.connectors = deepClone(DEFAULT_CONNECTORS);
+        }
+      }
+
+      function getAllCategories() {
+        const cats = [];
+        state.subjects.forEach(s => {
+          if (s.category && !cats.includes(s.category)) {
+            cats.push(s.category);
+          }
+        });
+        return cats;
+      }
+
+      function shuffleArray(arr) {
+        const copy = arr.slice();
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function showToast(message, isError = false) {
+        const container = document.getElementById('toastContainer');
+        const el = document.createElement('div');
+        el.className = 'toast' + (isError ? ' error' : '');
+        el.textContent = message;
+        container.appendChild(el);
+        requestAnimationFrame(() => el.classList.add('show'));
+        setTimeout(() => {
+          el.classList.remove('show');
+          setTimeout(() => el.remove(), 260);
+        }, 3000);
+      }
+
+      // Boîte de confirmation personnalisée (remplace confirm())
+      let confirmCallback = null;
+      function openConfirm(title, message, onConfirm) {
+        document.getElementById('modalConfirmTitle').textContent = title;
+        document.getElementById('modalConfirmMessage').textContent = message;
+        confirmCallback = onConfirm;
+        document.getElementById('modalConfirm').classList.add('open');
+      }
+
+      function closeConfirm() {
+        document.getElementById('modalConfirm').classList.remove('open');
+        confirmCallback = null;
+      }
+
+      // Signal sonore doux généré via Web Audio API (sans fichier externe)
+      function playChime() {
+        if (!state.timer.soundEnabled) return;
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          const ctx = new AudioCtx();
+          const now = ctx.currentTime;
+
+          const notes = [523.25, 659.25, 783.99]; // Accord Do majeur doux
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.14);
+            gain.gain.setValueAtTime(0.001, now + idx * 0.14);
+            gain.gain.exponentialRampToValueAtTime(0.18, now + idx * 0.14 + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.14 + 0.65);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.14);
+            osc.stop(now + idx * 0.14 + 0.7);
+          });
+        } catch (err) {
+          // Ignorer silencieusement si l'audio est bloqué par le navigateur
+        }
+      }
+
+      /* ======================================================================
+         4. RENDU DES CATÉGORIES ET COMPTEUR DE PIOCHE
+         ====================================================================== */
+      function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+        const categories = getAllCategories();
+        container.innerHTML = '';
+
+        categories.forEach(cat => {
+          const totalInCat = state.subjects.filter(s => s.category === cat).length;
+          const remainingInCat = state.subjects.filter(s => s.category === cat && !state.drawnIds.has(s.id)).length;
+          const isActive = state.activeCategories.has(cat);
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'cat-pill' + (isActive ? ' active' : '');
+          btn.setAttribute('aria-pressed', String(isActive));
+
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = cat;
+
+          const countSpan = document.createElement('span');
+          countSpan.className = 'cat-count';
+          countSpan.textContent = `${remainingInCat}/${totalInCat}`;
+
+          btn.appendChild(labelSpan);
+          btn.appendChild(countSpan);
+
+          btn.addEventListener('click', () => {
+            if (state.activeCategories.has(cat)) {
+              state.activeCategories.delete(cat);
+            } else {
+              state.activeCategories.add(cat);
+            }
+            renderCategories();
+            updateDeckCounter();
+          });
+
+          container.appendChild(btn);
+        });
+
+        // Mise à jour du bouton Tout sélectionner / Tout désélectionner
+        const toggleBtn = document.getElementById('btnToggleAllCats');
+        const allSelected = categories.length > 0 && categories.every(c => state.activeCategories.has(c));
+        toggleBtn.textContent = allSelected ? 'Tout désélectionner' : 'Tout sélectionner';
+      }
+
+      function getActivePool() {
+        return state.subjects.filter(s => state.activeCategories.has(s.category));
+      }
+
+      function getRemainingPool() {
+        return getActivePool().filter(s => !state.drawnIds.has(s.id));
+      }
+
+      function updateDeckCounter() {
+        const total = getActivePool().length;
+        const remaining = getRemainingPool().length;
+        const counterEl = document.getElementById('deckCounter');
+        const drawBtn = document.getElementById('btnDrawCard');
+
+        counterEl.textContent = `${remaining} / ${total} cartes restantes`;
+        drawBtn.disabled = remaining === 0;
+      }
+
+      /* ======================================================================
+         5. TIRAGE DE CARTE, RÔLES & CONNECTEURS INTERACTIFS
+         ====================================================================== */
+      function drawConnectorsForRound() {
+        if (!state.connectorsEnabled || state.connectors.length === 0) {
+          state.roundConnectors = { A: [], B: [] };
+          return;
+        }
+        const count = state.connectorsPerPlayer;
+        const shuffled = shuffleArray(state.connectors);
+        const listA = shuffled.slice(0, count).map(c => ({ text: c.text, used: false }));
+        const listB = shuffled.slice(count, count * 2).map(c => ({ text: c.text, used: false }));
+        state.roundConnectors = { A: listA, B: listB };
+      }
+
+      function drawCard() {
+        const pool = getRemainingPool();
+        if (pool.length === 0) {
+          showToast('Aucune carte disponible dans les catégories sélectionnées.', true);
+          return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * pool.length);
+        const picked = pool[randomIndex];
+
+        state.drawnIds.add(picked.id);
+        state.currentCard = picked;
+        state.drawCount += 1;
+        state.rolesSwapped = false;
+
+        drawConnectorsForRound();
+        renderCurrentCard(true);
+        renderCategories();
+        updateDeckCounter();
+      }
+
+      function renderRolesAndConnectors() {
+        const boxA = document.getElementById('playerABox');
+        const boxB = document.getElementById('playerBBox');
+        const roleA = document.getElementById('playerARole');
+        const roleB = document.getElementById('playerBRole');
+
+        if (!state.rolesSwapped) {
+          boxA.className = 'player-box role-pour';
+          roleA.textContent = 'Défend la thèse 1 / Pour';
+          boxB.className = 'player-box role-contre';
+          roleB.textContent = 'Défend la thèse 2 / Contre';
+        } else {
+          boxA.className = 'player-box role-contre';
+          roleA.textContent = 'Défend la thèse 2 / Contre';
+          boxB.className = 'player-box role-pour';
+          roleB.textContent = 'Défend la thèse 1 / Pour';
+        }
+
+        const wrapA = document.getElementById('playerAConnectorsWrap');
+        const wrapB = document.getElementById('playerBConnectorsWrap');
+        const listAEl = document.getElementById('playerAConnectors');
+        const listBEl = document.getElementById('playerBConnectors');
+
+        if (!state.connectorsEnabled) {
+          wrapA.style.display = 'none';
+          wrapB.style.display = 'none';
+          return;
+        }
+
+        wrapA.style.display = 'block';
+        wrapB.style.display = 'block';
+
+        renderConnectorChips(listAEl, state.roundConnectors.A);
+        renderConnectorChips(listBEl, state.roundConnectors.B);
+      }
+
+      function renderConnectorChips(container, list) {
+        container.innerHTML = '';
+        if (list.length === 0) {
+          const emptyMsg = document.createElement('span');
+          emptyMsg.style.fontSize = '0.88rem';
+          emptyMsg.style.color = 'var(--text-muted)';
+          emptyMsg.textContent = 'Aucun connecteur disponible.';
+          container.appendChild(emptyMsg);
+          return;
+        }
+
+        list.forEach(item => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'connector-chip' + (item.used ? ' used' : '');
+          btn.setAttribute('aria-pressed', String(item.used));
+
+          const check = document.createElement('span');
+          check.className = 'chip-check';
+          check.textContent = '✓';
+
+          const txt = document.createElement('span');
+          txt.className = 'chip-text';
+          txt.textContent = item.text;
+
+          btn.appendChild(check);
+          btn.appendChild(txt);
+
+          btn.addEventListener('click', () => {
+            item.used = !item.used;
+            btn.classList.toggle('used', item.used);
+            btn.setAttribute('aria-pressed', String(item.used));
+          });
+
+          container.appendChild(btn);
+        });
+      }
+
+      function renderCurrentCard(animate = false) {
+        const cardEl = document.getElementById('debateCard');
+        const placeholder = document.getElementById('cardPlaceholder');
+        const content = document.getElementById('cardContent');
+
+        if (!state.currentCard) {
+          placeholder.style.display = 'block';
+          content.style.display = 'none';
+          return;
+        }
+
+        placeholder.style.display = 'none';
+        content.style.display = 'block';
+
+        document.getElementById('cardCategory').textContent = state.currentCard.category;
+        document.getElementById('cardDrawNumber').textContent = `Tour #${state.drawCount}`;
+        document.getElementById('cardQuestion').textContent = state.currentCard.text;
+
+        renderRolesAndConnectors();
+
+        if (animate) {
+          cardEl.classList.remove('animate-draw');
+          void cardEl.offsetWidth; // Force le reflow pour relancer l'animation
+          cardEl.classList.add('animate-draw');
+        }
+      }
+
+      /* ======================================================================
+         6. CHRONOMÈTRE INTÉGRÉ & PERSONNALISABLE
+         ====================================================================== */
+      function formatTime(totalSec) {
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+
+      function updateTimerUI() {
+        const t = state.timer;
+        const bar = document.getElementById('timerBar');
+        const display = document.getElementById('timerDisplay');
+        const fill = document.getElementById('timerProgressFill');
+        const toggleBtn = document.getElementById('btnTimerToggle');
+        const input = document.getElementById('timerMinutesInput');
+
+        display.textContent = formatTime(t.remainingSeconds);
+        const pct = t.totalSeconds > 0 ? (t.remainingSeconds / t.totalSeconds) * 100 : 0;
+        fill.style.width = `${pct}%`;
+
+        input.value = t.durations[t.phase];
+        input.disabled = t.running;
+
+        document.getElementById('btnPhasePrep').classList.toggle('active', t.phase === 'prep');
+        document.getElementById('btnPhaseDebate').classList.toggle('active', t.phase === 'debate');
+
+        if (t.remainingSeconds === 0) {
+          bar.classList.add('finished');
+        } else {
+          bar.classList.remove('finished');
+        }
+
+        if (t.running) {
+          toggleBtn.classList.add('running');
+          toggleBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
+        } else {
+          toggleBtn.classList.remove('running');
+          toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg> Démarrer';
+        }
+      }
+
+      function stopTimer() {
+        if (state.timer.intervalId) {
+          clearInterval(state.timer.intervalId);
+          state.timer.intervalId = null;
+        }
+        state.timer.running = false;
+      }
+
+      function resetTimerToCurrentPhase() {
+        stopTimer();
+        const mins = Math.max(1, Math.min(120, parseInt(state.timer.durations[state.timer.phase], 10) || 1));
+        state.timer.durations[state.timer.phase] = mins;
+        state.timer.totalSeconds = mins * 60;
+        state.timer.remainingSeconds = mins * 60;
+        updateTimerUI();
+      }
+
+      function switchTimerPhase(phase) {
+        state.timer.phase = phase;
+        resetTimerToCurrentPhase();
+      }
+
+      function toggleTimer() {
+        const t = state.timer;
+        if (t.running) {
+          stopTimer();
+          updateTimerUI();
+          return;
+        }
+
+        if (t.remainingSeconds <= 0) {
+          resetTimerToCurrentPhase();
+        }
+
+        t.running = true;
+        updateTimerUI();
+
+        t.intervalId = setInterval(() => {
+          if (t.remainingSeconds > 0) {
+            t.remainingSeconds -= 1;
+            updateTimerUI();
+            if (t.remainingSeconds === 0) {
+              stopTimer();
+              updateTimerUI();
+              playChime();
+            }
+          }
+        }, 1000);
+      }
+
+      /* ======================================================================
+         7. ESPACE ORGANISATEUR : MODALES SUJETS & CONNECTEURS
+         ====================================================================== */
+      function populateCategorySelects() {
+        const cats = getAllCategories();
+        const formSelect = document.getElementById('subjectCatSelect');
+        const filterSelect = document.getElementById('filterSubjectsCat');
+
+        const currentFormVal = formSelect.value;
+        const currentFilterVal = filterSelect.value;
+
+        formSelect.innerHTML = '';
+        cats.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          formSelect.appendChild(opt);
+        });
+        const newOpt = document.createElement('option');
+        newOpt.value = '__NEW__';
+        newOpt.textContent = '+ Créer une nouvelle catégorie...';
+        formSelect.appendChild(newOpt);
+
+        if (currentFormVal && cats.includes(currentFormVal)) {
+          formSelect.value = currentFormVal;
+        }
+
+        filterSelect.innerHTML = '<option value="">Toutes les catégories</option>';
+        cats.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          filterSelect.appendChild(opt);
+        });
+        if (currentFilterVal && cats.includes(currentFilterVal)) {
+          filterSelect.value = currentFilterVal;
+        }
+
+        document.getElementById('newCatField').style.display = formSelect.value === '__NEW__' ? 'flex' : 'none';
+      }
+
+      function renderSubjectsModalList() {
+        const listEl = document.getElementById('subjectsModalList');
+        const query = document.getElementById('searchSubjectsInput').value.trim().toLowerCase();
+        const catFilter = document.getElementById('filterSubjectsCat').value;
+
+        const filtered = state.subjects.filter(s => {
+          const matchCat = !catFilter || s.category === catFilter;
+          const matchQuery = !query || s.text.toLowerCase().includes(query) || s.category.toLowerCase().includes(query);
+          return matchCat && matchQuery;
+        });
+
+        listEl.innerHTML = '';
+        if (filtered.length === 0) {
+          listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:1rem;">Aucun sujet trouvé.</p>';
+          return;
+        }
+
+        filtered.forEach(sub => {
+          const row = document.createElement('div');
+          row.className = 'item-row';
+
+          const content = document.createElement('div');
+          content.className = 'item-content';
+
+          const tag = document.createElement('span');
+          tag.className = 'item-cat-tag';
+          tag.textContent = sub.category;
+
+          const txt = document.createElement('div');
+          txt.className = 'item-text';
+          txt.textContent = sub.text;
+
+          content.appendChild(tag);
+          content.appendChild(txt);
+
+          const btns = document.createElement('div');
+          btns.className = 'item-btns';
+
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'btn-mini';
+          editBtn.textContent = 'Modifier';
+          editBtn.addEventListener('click', () => startEditSubject(sub));
+
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'btn-mini delete';
+          delBtn.textContent = 'Supprimer';
+          delBtn.addEventListener('click', () => {
+            openConfirm('Supprimer ce sujet ?', `Voulez-vous vraiment supprimer « ${sub.text.slice(0, 70)}... » ?`, () => {
+              state.subjects = state.subjects.filter(item => item.id !== sub.id);
+              state.drawnIds.delete(sub.id);
+              saveToStorage();
+              populateCategorySelects();
+              renderSubjectsModalList();
+              renderCategories();
+              updateDeckCounter();
+              showToast('Sujet supprimé.');
+            });
+          });
+
+          btns.appendChild(editBtn);
+          btns.appendChild(delBtn);
+
+          row.appendChild(content);
+          row.appendChild(btns);
+          listEl.appendChild(row);
+        });
+      }
+
+      function startEditSubject(sub) {
+        document.getElementById('editSubjectId').value = sub.id;
+        document.getElementById('subjectCatSelect').value = sub.category;
+        document.getElementById('newCatField').style.display = 'none';
+        document.getElementById('subjectTextInput').value = sub.text;
+        document.getElementById('btnSaveSubject').textContent = 'Enregistrer la modification';
+        document.getElementById('btnCancelSubjectEdit').style.display = 'inline-flex';
+        document.getElementById('subjectTextInput').focus();
+      }
+
+      function resetSubjectForm() {
+        document.getElementById('editSubjectId').value = '';
+        document.getElementById('subjectTextInput').value = '';
+        document.getElementById('subjectNewCatInput').value = '';
+        document.getElementById('btnSaveSubject').textContent = 'Ajouter le sujet';
+        document.getElementById('btnCancelSubjectEdit').style.display = 'none';
+        populateCategorySelects();
+      }
+
+      function renderConnectorsModalList() {
+        const listEl = document.getElementById('connectorsModalList');
+        const query = document.getElementById('searchConnectorsInput').value.trim().toLowerCase();
+
+        const filtered = state.connectors.filter(c => !query || c.text.toLowerCase().includes(query));
+
+        listEl.innerHTML = '';
+        if (filtered.length === 0) {
+          listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:1rem;">Aucun connecteur trouvé.</p>';
+          return;
+        }
+
+        filtered.forEach(con => {
+          const row = document.createElement('div');
+          row.className = 'item-row';
+
+          const content = document.createElement('div');
+          content.className = 'item-content';
+          const txt = document.createElement('div');
+          txt.className = 'item-text';
+          txt.style.fontWeight = '600';
+          txt.textContent = con.text;
+          content.appendChild(txt);
+
+          const btns = document.createElement('div');
+          btns.className = 'item-btns';
+
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'btn-mini';
+          editBtn.textContent = 'Modifier';
+          editBtn.addEventListener('click', () => {
+            document.getElementById('editConnectorId').value = con.id;
+            document.getElementById('connectorTextInput').value = con.text;
+            document.getElementById('btnSaveConnector').textContent = 'Enregistrer';
+            document.getElementById('btnCancelConnectorEdit').style.display = 'inline-flex';
+            document.getElementById('connectorTextInput').focus();
+          });
+
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'btn-mini delete';
+          delBtn.textContent = 'Supprimer';
+          delBtn.addEventListener('click', () => {
+            openConfirm('Supprimer ce connecteur ?', `Voulez-vous vraiment supprimer « ${con.text} » ?`, () => {
+              state.connectors = state.connectors.filter(item => item.id !== con.id);
+              saveToStorage();
+              renderConnectorsModalList();
+              showToast('Connecteur supprimé.');
+            });
+          });
+
+          btns.appendChild(editBtn);
+          btns.appendChild(delBtn);
+          row.appendChild(content);
+          row.appendChild(btns);
+          listEl.appendChild(row);
+        });
+      }
+
+      function resetConnectorForm() {
+        document.getElementById('editConnectorId').value = '';
+        document.getElementById('connectorTextInput').value = '';
+        document.getElementById('btnSaveConnector').textContent = 'Ajouter le connecteur';
+        document.getElementById('btnCancelConnectorEdit').style.display = 'none';
+      }
+
+      /* ======================================================================
+         8. EXPORT & IMPORT JSON
+         ====================================================================== */
+      function exportDataAsJson() {
+        const payload = {
+          app: 'L’Avocat du diable — C1',
+          exportedAt: new Date().toISOString(),
+          subjects: state.subjects,
+          connectors: state.connectors
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'avocat-du-diable-listes.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Listes exportées au format JSON.');
+      }
+
+      function handleImportFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const parsed = JSON.parse(e.target.result);
+            if (!parsed || !Array.isArray(parsed.subjects) || !Array.isArray(parsed.connectors)) {
+              throw new Error('Structure JSON invalide');
+            }
+
+            // Validation et normalisation
+            const validSubjects = parsed.subjects
+              .filter(s => s && typeof s.text === 'string' && s.text.trim() && typeof s.category === 'string' && s.category.trim())
+              .map(s => ({ id: s.id || generateId('s'), category: s.category.trim(), text: s.text.trim() }));
+
+            const validConnectors = parsed.connectors
+              .filter(c => c && typeof c.text === 'string' && c.text.trim())
+              .map(c => ({ id: c.id || generateId('c'), text: c.text.trim() }));
+
+            if (validSubjects.length === 0) {
+              throw new Error('Aucun sujet valide trouvé dans le fichier.');
+            }
+
+            state.subjects = validSubjects;
+            state.connectors = validConnectors;
+            state.drawnIds.clear();
+            state.activeCategories = new Set(getAllCategories());
+            saveToStorage();
+            renderCategories();
+            updateDeckCounter();
+            showToast(`Import réussi : ${validSubjects.length} sujets et ${validConnectors.length} connecteurs.`);
+          } catch (err) {
+            showToast('Fichier JSON invalide ou corrompu.', true);
+          } finally {
+            event.target.value = '';
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      /* ======================================================================
+         9. INITIALISATION & ÉCOUTEURS D'ÉVÉNEMENTS
+         ====================================================================== */
+      function bindEvents() {
+        // Tout sélectionner / Tout désélectionner
+        document.getElementById('btnToggleAllCats').addEventListener('click', () => {
+          const cats = getAllCategories();
+          const allSelected = cats.every(c => state.activeCategories.has(c));
+          if (allSelected) {
+            state.activeCategories.clear();
+          } else {
+            cats.forEach(c => state.activeCategories.add(c));
+          }
+          renderCategories();
+          updateDeckCounter();
+        });
+
+        // Toggle connecteurs
+        document.getElementById('toggleConnectors').addEventListener('change', (e) => {
+          state.connectorsEnabled = e.target.checked;
+          document.getElementById('connectorCountWrapper').classList.toggle('disabled', !state.connectorsEnabled);
+          if (state.currentCard) {
+            if (state.connectorsEnabled && state.roundConnectors.A.length === 0) {
+              drawConnectorsForRound();
+            }
+            renderRolesAndConnectors();
+          }
+        });
+
+        // Nombre de connecteurs (1, 2, 3)
+        document.querySelectorAll('.seg-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.connectorsPerPlayer = parseInt(btn.dataset.count, 10);
+            if (state.currentCard && state.connectorsEnabled) {
+              drawConnectorsForRound();
+              renderRolesAndConnectors();
+            }
+          });
+        });
+
+        // Piocher une carte
+        document.getElementById('btnDrawCard').addEventListener('click', drawCard);
+
+        // Réinitialiser la pioche
+        document.getElementById('btnResetDeck').addEventListener('click', () => {
+          state.drawnIds.clear();
+          state.drawCount = 0;
+          state.currentCard = null;
+          renderCurrentCard(false);
+          renderCategories();
+          updateDeckCounter();
+          showToast('Toutes les cartes ont été remises dans la pioche.');
+        });
+
+        // Inverser les rôles
+        document.getElementById('btnSwapRoles').addEventListener('click', () => {
+          state.rolesSwapped = !state.rolesSwapped;
+          renderRolesAndConnectors();
+        });
+
+        // Chronomètre
+        document.getElementById('btnPhasePrep').addEventListener('click', () => switchTimerPhase('prep'));
+        document.getElementById('btnPhaseDebate').addEventListener('click', () => switchTimerPhase('debate'));
+        document.getElementById('btnTimerToggle').addEventListener('click', toggleTimer);
+        document.getElementById('btnTimerReset').addEventListener('click', resetTimerToCurrentPhase);
+
+        document.getElementById('timerMinutesInput').addEventListener('change', (e) => {
+          let val = parseInt(e.target.value, 10);
+          if (isNaN(val) || val < 1) val = 1;
+          if (val > 120) val = 120;
+          state.timer.durations[state.timer.phase] = val;
+          resetTimerToCurrentPhase();
+        });
+
+        document.getElementById('btnTimerSound').addEventListener('click', (e) => {
+          state.timer.soundEnabled = !state.timer.soundEnabled;
+          e.currentTarget.classList.toggle('muted', !state.timer.soundEnabled);
+          showToast(state.timer.soundEnabled ? 'Signal sonore activé.' : 'Signal sonore désactivé.');
+        });
+
+        // Ouverture modales
+        document.getElementById('btnOpenSubjects').addEventListener('click', () => {
+          resetSubjectForm();
+          populateCategorySelects();
+          renderSubjectsModalList();
+          document.getElementById('modalSubjects').classList.add('open');
+        });
+
+        document.getElementById('btnOpenConnectors').addEventListener('click', () => {
+          resetConnectorForm();
+          renderConnectorsModalList();
+          document.getElementById('modalConnectors').classList.add('open');
+        });
+
+        // Fermeture modales
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.getElementById(btn.dataset.closeModal).classList.remove('open');
+          });
+        });
+
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+          backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+              if (backdrop.id === 'modalConfirm') closeConfirm();
+              else backdrop.classList.remove('open');
+            }
+          });
+        });
+
+        // Formulaire Sujets
+        document.getElementById('subjectCatSelect').addEventListener('change', (e) => {
+          const isNew = e.target.value === '__NEW__';
+          document.getElementById('newCatField').style.display = isNew ? 'flex' : 'none';
+          if (isNew) document.getElementById('subjectNewCatInput').focus();
+        });
+
+        document.getElementById('btnCancelSubjectEdit').addEventListener('click', resetSubjectForm);
+
+        document.getElementById('subjectForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('editSubjectId').value;
+          const selectVal = document.getElementById('subjectCatSelect').value;
+          const newCatVal = document.getElementById('subjectNewCatInput').value.trim();
+          const textVal = document.getElementById('subjectTextInput').value.trim();
+
+          const category = selectVal === '__NEW__' ? newCatVal : selectVal;
+          if (!category) {
+            showToast('Veuillez saisir un nom de catégorie.', true);
+            return;
+          }
+          if (!textVal) return;
+
+          if (editId) {
+            const target = state.subjects.find(s => s.id === editId);
+            if (target) {
+              target.category = category;
+              target.text = textVal;
+              if (state.currentCard && state.currentCard.id === editId) {
+                state.currentCard = target;
+                renderCurrentCard(false);
+              }
+            }
+            showToast('Sujet modifié.');
+          } else {
+            state.subjects.unshift({ id: generateId('s'), category, text: textVal });
+            state.activeCategories.add(category);
+            showToast('Nouveau sujet ajouté.');
+          }
+
+          saveToStorage();
+          resetSubjectForm();
+          renderSubjectsModalList();
+          renderCategories();
+          updateDeckCounter();
+        });
+
+        document.getElementById('searchSubjectsInput').addEventListener('input', renderSubjectsModalList);
+        document.getElementById('filterSubjectsCat').addEventListener('change', renderSubjectsModalList);
+
+        document.getElementById('btnResetDefaultSubjects').addEventListener('click', () => {
+          openConfirm(
+            'Réinitialiser les sujets ?',
+            'Toutes vos modifications sur la liste des sujets seront remplacées par les 87 sujets par défaut.',
+            () => {
+              state.subjects = deepClone(DEFAULT_SUBJECTS);
+              state.drawnIds.clear();
+              state.activeCategories = new Set(getAllCategories());
+              saveToStorage();
+              resetSubjectForm();
+              renderSubjectsModalList();
+              renderCategories();
+              updateDeckCounter();
+              showToast('Sujets par défaut restaurés.');
+            }
+          );
+        });
+
+        // Formulaire Connecteurs
+        document.getElementById('btnCancelConnectorEdit').addEventListener('click', resetConnectorForm);
+
+        document.getElementById('connectorForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('editConnectorId').value;
+          const textVal = document.getElementById('connectorTextInput').value.trim();
+          if (!textVal) return;
+
+          if (editId) {
+            const target = state.connectors.find(c => c.id === editId);
+            if (target) target.text = textVal;
+            showToast('Connecteur modifié.');
+          } else {
+            state.connectors.unshift({ id: generateId('c'), text: textVal });
+            showToast('Nouveau connecteur ajouté.');
+          }
+
+          saveToStorage();
+          resetConnectorForm();
+          renderConnectorsModalList();
+        });
+
+        document.getElementById('searchConnectorsInput').addEventListener('input', renderConnectorsModalList);
+
+        document.getElementById('btnResetDefaultConnectors').addEventListener('click', () => {
+          openConfirm(
+            'Réinitialiser les connecteurs ?',
+            'Toutes vos modifications sur la liste des connecteurs seront remplacées par les 51 connecteurs par défaut.',
+            () => {
+              state.connectors = deepClone(DEFAULT_CONNECTORS);
+              saveToStorage();
+              resetConnectorForm();
+              renderConnectorsModalList();
+              showToast('Connecteurs par défaut restaurés.');
+            }
+          );
+        });
+
+        // Confirmation modale
+        document.getElementById('btnConfirmCancel').addEventListener('click', closeConfirm);
+        document.getElementById('btnConfirmCancelX').addEventListener('click', closeConfirm);
+        document.getElementById('btnConfirmOk').addEventListener('click', () => {
+          const cb = confirmCallback;
+          closeConfirm();
+          if (typeof cb === 'function') cb();
+        });
+
+        // Export / Import JSON
+        document.getElementById('btnExportJson').addEventListener('click', exportDataAsJson);
+        document.getElementById('btnImportJson').addEventListener('click', () => {
+          document.getElementById('fileImportInput').click();
+        });
+        document.getElementById('fileImportInput').addEventListener('change', handleImportFile);
+
+        // Touche Échap pour fermer les modales
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeConfirm();
+            document.getElementById('modalSubjects').classList.remove('open');
+            document.getElementById('modalConnectors').classList.remove('open');
+          }
+        });
+      }
+
+      function init() {
+        loadFromStorage();
+        state.activeCategories = new Set(getAllCategories());
+        bindEvents();
+        renderCategories();
+        updateDeckCounter();
+        updateTimerUI();
+      }
+
+      window.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
+</body>
+</html>
